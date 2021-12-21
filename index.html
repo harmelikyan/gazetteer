@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Gazetteer</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="icon" type="image/png" href="img/globe_color.png">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="  crossorigin=""/>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="preloader"></div>
+        <!--Map-->
+        <div id="issMap"></div>
+         <!--buttons-->
+        <div class="fixed-top" id="iconContainer">
+            <button type="button" class="btn" data-toggle="modal" data-target="#infoModal" style="margin-top: 100px;" id="infoImg">
+                <img src="img/info.png" alt="info icon" id="infoIcon" class="iconImg">
+              </button>
+              <button type="button" class="btn" data-toggle="modal" data-target="#weatherModal" id="weatherImg">
+                <img src="img/cloudy.png" alt="weather icon" id="weatherIcon" class="iconImg">
+                </button>
+              <button type="button" class="btn" data-toggle="modal" data-target="#exchangeModal" id="exchangeImg">
+                <img src="img/money.png" alt="exchange icon" id="exchangeIcon" class="iconImg">
+              </button>
+        <button type="button" class="btn" data-toggle="modal" data-target="#newsModal" id="newsImg">
+            <img src="img/news.png" alt="news icon" id="newsIcon" class="iconImg">
+          </button>
+          <button type="button" class="btn" data-toggle="modal" data-target="#holidayModal" id="holidayImg">
+            <img src="img/holidays.png" alt="info icon" id="holidayIcon" class="iconImg">
+          </button>
+            <button type="button" class="btn" data-toggle="modal" data-target="#covidModal" id="covidImg">
+            <img src="img/coronavirus.png" alt="covid icon" id="covidIcon" class="iconImg">
+          </button>
+        </div>
+
+         <!--National Holidays-->
+         <div class="modal fade" id="holidayModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h3 class="modal-title" style="margin-left: 60px;">Holidays</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <table class="table table-striped holidayTable">
+                  <thead class="theadColor2">
+                      <tr> 
+                      <th colspan="3" class="text-center row-12" id="countryNamee"></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td id="holiday"></td>
+                          <td  id="holidayDate"></td>
+                      </tr>
+                      <tr>
+                        <td id="holiday2"></td>
+                        <td id="holidayDate2"></td> 
+                      </tr>
+                      <tr>
+                          <td id="holiday3"></td>
+                          <td id="holidayDate3"></td>
+                      </tr>
+                      <tr>
+                          <td id="holiday4"></td>
+                          <td id="holidayDate4"></td> 
+                      </tr>
+                      <tr>
+                        <td id="holiday5"></td>
+                        <td id="holidayDate5"></td>
+                      </tr>
+                      <tr>
+                        <td id="holiday6"></td> 
+                        <td id="holidayDate6"></td>
+                      </tr>
+                  </tbody>
+              </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+          
+        <!--News-->
+          <div class="modal fade" id="newsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 class="modal-title" id="countryname3"></h2>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="geNews">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="news"></div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Covid-->
+          <div class="modal fade" id="covidModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Covid Cases</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="geNews">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="covid">
+                  <table class="table table-striped covidTable">
+                    <thead class="theadColor">
+                        <tr> 
+                        <th colspan="3" class="text-center row-12" id="countryName2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fas fa-temperature-high fa-2x colorIcon"></i></td>
+                            <td>New Cases</td>
+                            <td  id="todayCases"></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>Total Cases</td>
+                          <td id="cases"></td> 
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-sad-tear fa-2x colorIcon"></i></td>
+                            <td>New Deaths</td>
+                            <td id="todayDeaths"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>Total Deaths</td>
+                            <td id="deaths"></td> 
+                        </tr>
+                        <tr>
+                          <td><i class="far fa-hand-spock fa-2x colorIcon"></i></td>
+                          <td>Newly Recovered</td>
+                          <td id="todayRecovered"></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td>Total Recovered</td>
+                          <td id="recovered"></td> 
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+            <!--Choose country-->
+            <table class="fixed-top">
+              <tbody class="table-close">
+                    <th class="chooseC"><div class="container">
+                            <select name="countries" id="countries" class="countName form-control js-example-basic-single" style="width: 200px;">
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                    </th>
+            </table>
+          <!--Country card-->
+          <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header" class="countryCard">
+                  <h5 class="modal-title text-center" id="countryInfo" class="countryCard"></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="info">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="country" class="countryCard">
+                    <div id="countryCard">
+            <table class="table table-bordered head-dark" id="countrycard" class="countryCard">
+                        <tr> 
+                            <td scope="row">Flag</td>
+                            <td scope="row"><img src="" style="height: 30px" id="country_flag" /></td>
+                        </tr>
+                        <tr> 
+                          <td scope="row">Crest</td>
+                          <td scope="row"><img src="" style="height: 50px;" id="coat" /></td>
+                      </tr>
+                        
+                        <tr>
+                            <td style="width: 20px">Capital</td>
+                            <td id="country_capital"></td>
+                        </tr>
+                        <tr>
+                            <td>Time</td>
+                            <td id="cloack"></td>
+                        </tr>
+                        <tr>
+                            <td>Population</td>
+                            <td id="country_population"></td>
+                        </tr>  
+                        <tr>
+                          <td>Area</td>
+                          <td id="area"></td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td id="nativeName"></td>
+                        </tr>    
+                        <tr>
+                            <td>Region</td>
+                            <td id="region"></td>
+                        </tr>
+                        <tr>
+                          <td>Currency</td>
+                          <td id="currency"></td>
+                      </tr>
+                      <tr>
+                        <td>Language</td>
+                        <td id="language"></td>
+                    </tr>
+                        <tr>
+                            <td class="text-dark">Wikipedia</td>
+                            <td>
+                              <a href="" target="_blank" class="text-primary" id="countryWikipedia">Click Here</a>
+                            </td>
+                          </tr>
+                    </tbody>
+            </table>
+                </div>
+                <div class="modal-footer" class="countryCard">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>      
+          </div>
+
+          <!--Exchange-->
+                     <div class="modal fade" id="exchangeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                              <table>
+                                <tr> 
+                                <th class="text-center text-dark" id="exchangeFirst">Local Currency to Dollar</th>
+                              </tr>
+                              <tr>
+                                <td class="text-center" id="exchangeRates"></td>
+                              </tr>
+                              </table>
+                              </div>
+                              </div>
+                              </div>
+                              
+                    <!--weather-->
+                            <div class="modal fade" id="weatherModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                  <div class="card">
+                                    <h2 id="countrysName" class="text-center"></h2>
+                                    <h1 id="currentTemp" class="text-center"></h1>
+                                    <table id="weatherDescription" class="table">
+                                      <thead> 
+                                      <th class="text-center weatherDescTable">Sky</th>
+                                      <th class="text-center weatherDescTable">Wind Speed</th>
+                                      <th class="text-center weatherDescTable">Humidity</th>
+                                    </thead>
+                                    <tbody>
+                                      <tr class="tr">
+                                        <td id="weatherInfo" class="text-center"></td>
+                                        <td id="wind_speed" class="text-center"></td>
+                                        <td id="humidity" class="text-center"></td>
+                                      </tr>
+                                      <tr>
+                                        <th class="text-center weatherDescTable">Sunset</th>
+                                        <th class="text-center weatherDescTable">Sunrise</th>
+                                        <th class="text-center weatherDescTable">UVI</th>
+                                      </tr>
+
+                                      <tr>
+                                        <td class="text-center" id="sunset"></td>
+                                        <td class="text-center text-dark" id="sunrise"></td>
+                                        <td class="text-center text-dark" id="uvi"></td>
+                                      </tr>
+                                    </tbody>
+                                    </table>
+                                    <img src="" alt="" class="weatherIcon" id="cloud2">
+                                    <table class="table2 box">
+                                      <thead>
+                                        <tr class="d-flex flex-row">
+                                            <th class="weatherRow" id="first-row"></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody> 
+                                        <tr> 
+                                          <td class="weatherRow" id="second-row"></td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                              
+        
+
+        <script src="javascript/jquery.js"></script>  
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+        <script src="javascript/leaflet.extra-markers.min.js"></script>
+        <script src="javascript/leaflet.markercluster.js"></script>
+        <script src="javascript/bootstrap.min.js"></script>
+        <script src="javascript/moment.min.js"></script>
+        <script src="javascript/moment-with-locale.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script type="module" src="javascript/app.js"></script>
+   
+
+    </body>
+</html>
